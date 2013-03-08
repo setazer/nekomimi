@@ -1,0 +1,4 @@
+pref="gel" name="Gelbooru" api_url="http://youhate.us/index.php?page=dapi&s=post&q=index&tags=" page="pid"
+pref="kona" name="Konachan" api_url="http://konachan.com/post/index.xml?tags=" page="page"
+pref="yan" name="Yandere" api_url="http://yande.re/post/index.xml?tags=" page="page"
+pref="dan" name="Danbooru" api_url="http://danbooru.donmai.us/post/index.xml?tags=" pref_dl="http://danbooru.donmai.us" page="page"
