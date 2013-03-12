@@ -1,4 +1,4 @@
-ï»¿#! /bin/bash
+#! /bin/bash
 uag="Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.1.1) Gecko/20090715 Firefox/3.5.1 (.NET CLR 3.5.30729)"
 tag=$1
 pref=$2
@@ -19,14 +19,14 @@ let "linen=linen+1"
 done < Ids.txt
 if [ $linen -ne 0 ]
 then
-echo -e ">>>\E[32mÐÐ°Ð¹Ð´ÐµÐ½Ñ‹ Ð½Ð¾Ð²Ñ‹Ðµ Ð¿Ð¾ÑÑ‚Ñ‹\E[37m"
-echo -e ">>>\E[36mÐ’ÑÐµÐ³Ð¾: \E[37m$linen"
+echo -e ">>>\E[32mÍàéäåíû íîâûå ïîñòû\E[37m"
+echo -e ">>>\E[36mÂñåãî: \E[37m$linen"
 echo "$tag: $linen" >> "../$pref.NewPostsCount.txt"
 head -n $linen urlsids.txt | sed -r -e 's/ [0-9]+//g' > new/dload.txt
 head -n $linen urlsids.txt > new/urlsids.txt
 cd new
 wget -nc -nv -i dload.txt
-echo -e ">>>\E[36mÐŸÐµÑ€ÐµÐ¸Ð¼ÐµÐ½Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð½Ð¾Ð²Ñ‹Ñ… Ð¿Ð¾ÑÑ‚Ð¾Ð²\E[37m"
+echo -e ">>>\E[36mÏåðåèìåíîâàíèå íîâûõ ïîñòîâ\E[37m"
 echo "#! /bin/bash" > renamer.sh
 sed -e "s/ /\" $pref./g" UrlsIds.txt | sed -r -e "s/.+\//mv \"/g"  > temp.txt
 while read LINE ;do
@@ -37,12 +37,12 @@ rm -f temp.txt
 renamer.sh
 rm -f renamer.sh
 rm -f urlsids.txt
-echo -e ">>>\E[32mÐŸÐµÑ€ÐµÐ¸Ð¼ÐµÐ½Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð·Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð¾\E[37m"
+echo -e ">>>\E[32mÏåðåèìåíîâàíèå çàâåðøåíî\E[37m"
 rm -f dload.txt
 cd ..
-echo -e ">>>\E[32mÐ¡ÐºÐ°Ñ‡Ð¸Ð²Ð°Ð½Ð¸Ðµ Ð·Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð¾\E[37m"
+echo -e ">>>\E[32mÑêà÷èâàíèå çàâåðøåíî\E[37m"
 else
-echo -e ">>>\E[31mÐÐ¾Ð²Ñ‹Ðµ Ð¿Ð¾ÑÑ‚Ñ‹ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ñ‹\E[37m"
+echo -e ">>>\E[31mÍîâûå ïîñòû íå íàéäåíû\E[37m"
 fi
 head -n 1 ids.txt > "$pref.lastpost.txt"
 rm -f UrlsIds.txt

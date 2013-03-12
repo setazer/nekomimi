@@ -1,11 +1,11 @@
-п»ї#! /bin/bash
+#! /bin/bash
 ls -d */ | sed -e 's/\///g' > tags.txt
 while read LINE; do
 cd $LINE/new
 if [ -e *.* ]
 then
 mv -f *.* ../
-echo -e ">>>\E[36mРџРµСЂРµРјРµС‰РµРЅРёРµ РЅРѕРІС‹С… РїРѕСЃС‚РѕРІ С‚СЌРіР°: \E[37m$LINE"
+echo -e ">>>\E[36mПеремещение новых постов тэга: \E[37m$LINE"
 fi
 cd ../..
 done < tags.txt
