@@ -1,4 +1,4 @@
-#! /bin/bash
+п»ї#! /bin/bash
 uag="Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.1.1) Gecko/20090715 Firefox/3.5.1 (.NET CLR 3.5.30729)"
 tag=$1
 pref=$2
@@ -12,15 +12,15 @@ then
 lastpost=$(cat "$pref.lastpost.txt")
 if [ ! -z $lastpost ]
 then
-echo -e ">>>\E[32mФайл последнего поста найден\E[37m"
-echo -e ">>>\E[36mID последнего поста: \E[37m$lastpost"
+echo -e ">>>\E[32mР¤Р°Р№Р» РїРѕСЃР»РµРґРЅРµРіРѕ РїРѕСЃС‚Р° РЅР°Р№РґРµРЅ\E[37m"
+echo -e ">>>\E[36mID РїРѕСЃР»РµРґРЅРµРіРѕ РїРѕСЃС‚Р°: \E[37m$lastpost"
 exit
 fi
 fi 
 lastpost=0
-echo -e ">>>\E[31mID последнего поста не найден\E[37m"
-#Старый алгоритм поиска последнего номера поста
-#по имени файлов вида 01asd165asd0343asd13a2s1d3.jpg
+echo -e ">>>\E[31mID РїРѕСЃР»РµРґРЅРµРіРѕ РїРѕСЃС‚Р° РЅРµ РЅР°Р№РґРµРЅ\E[37m"
+#РЎС‚Р°СЂС‹Р№ Р°Р»РіРѕСЂРёС‚Рј РїРѕРёСЃРєР° РїРѕСЃР»РµРґРЅРµРіРѕ РЅРѕРјРµСЂР° РїРѕСЃС‚Р°
+#РїРѕ РёРјРµРЅРё С„Р°Р№Р»РѕРІ РІРёРґР° 01asd165asd0343asd13a2s1d3.jpg
 #while read LINE; do
 #url=`echo $LINE | sed -r -e 's/ [0-9]+//g'`
 #curfile=`basename $url`
@@ -43,7 +43,7 @@ let "lastpost=LINE"
 fi
 done < files.txt
 rm files.txt
-echo -e ">>>\E[32mНайден ID последнего поста: \E[37m$lastpost"
+echo -e ">>>\E[32mРќР°Р№РґРµРЅ ID РїРѕСЃР»РµРґРЅРµРіРѕ РїРѕСЃС‚Р°: \E[37m$lastpost"
 if [ $lastpost -gt 0 ]
 then
 echo $lastpost > "$pref.lastpost.txt"

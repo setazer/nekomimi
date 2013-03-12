@@ -1,10 +1,10 @@
-#pref="" name="" api_url="" pref_dl="" page="" bl_tags="" post_url=""
-#pref - префикс сервера
-#name - имя сервера (используется в качестве имени подпапки в коллекции)
-#api_url - Используемое API 
-#pref_dl - префикс для скачивания постов (для серверов типа Danbooru, которые хранят file_url относительной ссылкой)
-#bl_tags - список исключаемых из скачивания тегов
-#post_url - URL для генерации ссылки для браузера
+п»ї#pref="" name="" api_url="" pref_dl="" page="" bl_tags="" post_url=""
+#pref - РїСЂРµС„РёРєСЃ СЃРµСЂРІРµСЂР°
+#name - РёРјСЏ СЃРµСЂРІРµСЂР° (РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РІ РєР°С‡РµСЃС‚РІРµ РёРјРµРЅРё РїРѕРґРїР°РїРєРё РІ РєРѕР»Р»РµРєС†РёРё)
+#api_url - РСЃРїРѕР»СЊР·СѓРµРјРѕРµ API 
+#pref_dl - РїСЂРµС„РёРєСЃ РґР»СЏ СЃРєР°С‡РёРІР°РЅРёСЏ РїРѕСЃС‚РѕРІ (РґР»СЏ СЃРµСЂРІРµСЂРѕРІ С‚РёРїР° Danbooru, РєРѕС‚РѕСЂС‹Рµ С…СЂР°РЅСЏС‚ file_url РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕР№ СЃСЃС‹Р»РєРѕР№)
+#bl_tags - СЃРїРёСЃРѕРє РёСЃРєР»СЋС‡Р°РµРјС‹С… РёР· СЃРєР°С‡РёРІР°РЅРёСЏ С‚РµРіРѕРІ
+#post_url - URL РґР»СЏ РіРµРЅРµСЂР°С†РёРё СЃСЃС‹Р»РєРё РґР»СЏ Р±СЂР°СѓР·РµСЂР°
 pref="rule34" name="Rule34" api_url="http://rule34.xxx/index.php?page=dapi&s=post&q=index" page="pid" bl_tags="" post_url="http://rule34.paheal.net/post/view/"
 pref="safe" name="Safebooru" api_url="http://safebooru.org/index.php?page=dapi&s=post&q=index" page="pid" bl_tags="" post_url="safebooru.org/index.php?page=forum&s=view&id="
 pref="gel" name="Gelbooru" api_url="http://youhate.us/index.php?page=dapi&s=post&q=index" page="pid" bl_tags="penis cum huge_breasts huge_penis pussy sex" post_url="http://gelbooru.com/index.php?page=post&s=view&id="

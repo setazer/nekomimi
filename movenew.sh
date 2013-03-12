@@ -1,11 +1,11 @@
-#! /bin/bash
+Ôªø#! /bin/bash
 ls -d */ | sed -e 's/\///g' > tags.txt
 while read LINE; do
 cd $LINE/new
 if [ -e *.* ]
 then
 mv -f *.* ../
-echo -e ">>>\E[36mœÂÂÏÂ˘ÂÌËÂ ÌÓ‚˚ı ÔÓÒÚÓ‚ Ú˝„‡: \E[37m$LINE"
+echo -e ">>>\E[36m–ü–µ—Ä–µ–º–µ—â–µ–Ω–∏–µ –Ω–æ–≤—ã—Ö –ø–æ—Å—Ç–æ–≤ —Ç—ç–≥–∞: \E[37m$LINE"
 fi
 cd ../..
 done < tags.txt
