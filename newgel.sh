@@ -34,7 +34,6 @@ ext=`echo "$LINE" | grep -E -o -e "\.[^\"]{3,4}\""|sed -e "s/\"//g"`
 echo $LINE$ext|sed -e "s/%20/ /g" >> renamer.sh
 done < temp.txt
 rm -f temp.txt
-read -p "waiting"
 renamer.sh
 rm -f renamer.sh
 rm -f urlsids.txt

@@ -7,65 +7,103 @@ read new_fold
 echo $new_fold > pictures-folder.txt
 done
 scriptfolder=`pwd`
-#TO-DO: Вывод списка доступных серверов
-show_servers.sh
-echo ">>>Выберите сервер, введя его префикс"
-read pref
+pref=$2
 serv_line=`grep "pref=\"$pref\"" servers.txt`
 if [ -n "$serv_line" ]; then
 name=`echo $serv_line | grep -E -o -e "name=\"[^\"]+" | sed -e "s/name=\"//"`
 api_url=`echo $serv_line | grep -E -o -e "api_url=\"[^\"]+" | sed -e "s/api_url=\"//"`
+post_url=`echo $serv_line | grep -E -o -e "post_url=\"[^\"]+" | sed -e "s/post_url=\"//"`
 pref_dl=`echo $serv_line | grep -E -o -e "pref_dl=\"[^\"]*" | sed -e "s/pref_dl=\"//"`
 page=`echo $serv_line | grep -E -o -e "page=\"[^\"]+" | sed -e "s/page=\"//"`
+bl_tags=`echo $serv_line | grep -E -o -e "bl_tags=\"[^\"]+" | sed -r -e "s/bl_tags=\"//" -e "s/^/\+\-/" -e "s/ /\+\-/g"`
 else
-echo ">>>Такой сервер не найден"
+echo -e ">>>\E[31mПрефикс сервера не опознан\E[37m"
 exit
 fi
 cd "$(cat pictures-folder.txt)"
+if [ ! -d $name ]
+then
+mkdir "$name"
+fi
 cd $name
 case "$1" in
 	-ua)
+rm -f "$pref.NewPostsCount.txt"
 ls -d */ | grep -v -e '+' |sed -e 's/\///g' > tags.txt
-echo "Новые посты у тегов:" > "$pref.NewPostsCount.txt"
 i=0
 total=`ls -d -1 */ | wc -l`
 while read LINE; do
 let i++
 echo -e ">>>\E[35mОбработка тэга ($i/$total): \E[37m$LINE"
-$scriptfolder/getinfo.sh $LINE $pref $api_url $pref_dl $page
+$scriptfolder/getinfo.sh $LINE $pref $api_url $pref_dl $page $bl_tags
 $scriptfolder/lpgen.sh $LINE $pref
 $scriptfolder/newgel.sh $LINE $pref
 echo ">>>"
 done < tags.txt
 rm -f tags.txt
 echo -e ">>>\E[35mОбновление тэгов завершено\E[37m"
+if [ -e "$pref.NewPostsCount.txt" ]; then
+echo ">>>"
+echo -e ">>>\E[35mНовые посты у тегов:\E[37m"
 cat "$pref.NewPostsCount.txt"
+echo -e ">>>\E[35mОткрыть папки с новыми тэгами?(y/n)\E[37m"
+read ans
+if [ "$ans" == "y" ]; then
+$scriptfolder/show_new.sh $pref
+fi
+fi
 ;;
 	-u)
-if [ -d "$2" ]
+if [ -d "$3" ]
 then
-echo -e ">>>\E[35mОбработка тэга: \E[37m$2"
-$scriptfolder/getinfo.sh $2 $pref $api_url $pref_dl $page
-$scriptfolder/lpgen.sh $2 $pref
-$scriptfolder/newgel.sh $2 $pref
+rm -f "$pref.NewPostsCount.txt"
+echo -e ">>>\E[35mОбработка тэга: \E[37m$3"
+$scriptfolder/getinfo.sh $3 $pref $api_url $pref_dl $page $bl_tags
+$scriptfolder/lpgen.sh $3 $pref
+$scriptfolder/newgel.sh $3 $pref
 echo -e ">>>\E[35mОбновление тэга завершено\E[37m"
+if [ -e "$pref.NewPostsCount.txt" ]; then
+echo ">>>"
+echo -e ">>>\E[35mОткрыть папку с новыми постами?(y/n)\E[37m"
+read ans
+if [ "$ans" == "y" ]; then
+cd $3
+start new
+cd ..
+fi
+fi
 else
-echo -e ">>>\E[31mТэг \E[37m'$2' \E[31mне найден!\E[37m"
+echo -e ">>>\E[31mТэг \E[37m'$3' \E[31mне найден!\E[37m"
 fi
 ;;
 	-n)
-echo -e ">>>\E[35mОбработка тэга: \E[37m$2"
-$scriptfolder/getinfo.sh $2 $pref $api_url $pref_dl $page
-echo 0 > $2/$pref.lastpost.txt
-$scriptfolder/lpgen.sh $2 $pref
-$scriptfolder/newgel.sh $2 $pref
-mv $2/new/*.* $2/
+rm -f "$pref.NewPostsCount.txt"
+echo -e ">>>\E[35mОбработка тэга: \E[37m$3"
+$scriptfolder/getinfo.sh $3 $pref $api_url $pref_dl $page $bl_tags
+echo 0 > $3/$pref.lastpost.txt
+$scriptfolder/lpgen.sh $3 $pref
+$scriptfolder/newgel.sh $3 $pref
+mv $3/new/*.* $3/
 echo -e ">>>\E[35mСкачивание тэга завершено\E[37m"
+if [ -e "$pref.NewPostsCount.txt" ]; then
+echo ">>>"
+echo -e ">>>\E[35mОткрыть папку с новыми постами?(y/n)\E[37m"
+read ans
+if [ "$ans" == "y" ]; then
+start $3
+fi
+fi
+;;
+	-l)
+$scriptfolder/genlink.sh $post_url $3
 ;;
 	-gp)
-echo -e ">>>\E[35mСкачивание поста \E[37m'$2'"
-$scriptfolder/get.sh $2 $3
+echo -e ">>>\E[35mСкачивание поста \E[37m'$3'"
+$scriptfolder/get.sh $pref $3 $api_url $pref_dl
 echo -e ">>>\E[35mСкачивание завершено\E[37m"
+;;
+	-sn)
+$scriptfolder/show_new.sh $pref
 ;;
 	-mv)
 $scriptfolder/movenew.sh

@@ -1,2 +1,4 @@
 #! /bin/bash
-echo "http://gelbooru.com/index.php?page=post&s=view&id=$1"
+post_url=$1
+id=$2
+echo "$post_url$id"
