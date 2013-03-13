@@ -1,7 +1,6 @@
 #! /bin/bash
 cls
-while [ ! -d "$(cat pictures-folder.txt)" ]
-do
+while [ ! -d "$(cat pictures-folder.txt)" ]; do
 echo ">>>Основаная папка с пикчами не найдена"
 echo ">>>Введите путь до папки с пикчами:"
 read new_fold
@@ -36,9 +35,9 @@ total=`ls -d -1 */ | wc -l`
 while read LINE; do
 let i++
 echo -e ">>>\E[35mОбработка тэга ($i/$total): \E[37m$LINE"
-$scriptfolder/getinfo.sh $LINE $pref $api_url $pref_dl $page $bl_tags
-$scriptfolder/lpgen.sh $LINE $pref
-$scriptfolder/dloader.sh $LINE $pref
+$scriptfolder/getinfo.sh "$LINE" "$pref" "$api_url" "$pref_dl" "$page" "$bl_tags"
+$scriptfolder/lpgen.sh "$LINE" "$pref"
+$scriptfolder/dloader.sh "$LINE" "$pref"
 echo ">>>"
 done < tags.txt
 rm -f tags.txt
@@ -50,7 +49,7 @@ cat "$pref.NewPostsCount.txt"
 echo -e ">>>\E[35mОткрыть папки с новыми тэгами?(y/n)\E[37m"
 read ans
 if [ "$ans" == "y" ]; then
-$scriptfolder/show_new.sh $pref
+$scriptfolder/show_new.sh "$pref"
 fi
 fi
 ;;
@@ -59,9 +58,9 @@ if [ -d "$3" ]
 then
 rm -f "$pref.NewPostsCount.txt"
 echo -e ">>>\E[35mОбработка тэга: \E[37m$3"
-$scriptfolder/getinfo.sh $3 $pref $api_url $pref_dl $page $bl_tags
-$scriptfolder/lpgen.sh $3 $pref
-$scriptfolder/dloader.sh $3 $pref
+$scriptfolder/getinfo.sh "$3" "$pref" "$api_url" "$pref_dl" "$page" "$bl_tags"
+$scriptfolder/lpgen.sh "$3" "$pref"
+$scriptfolder/dloader.sh "$3" "$pref"
 echo -e ">>>\E[35mОбновление тэга завершено\E[37m"
 if [ -e "$pref.NewPostsCount.txt" ]; then
 echo ">>>"
@@ -80,10 +79,10 @@ fi
 	-n)
 rm -f "$pref.NewPostsCount.txt"
 echo -e ">>>\E[35mОбработка тэга: \E[37m$3"
-$scriptfolder/getinfo.sh $3 $pref $api_url $pref_dl $page $bl_tags
-echo 0 > $3/$pref.lastpost.txt
-$scriptfolder/lpgen.sh $3 $pref
-$scriptfolder/dloader.sh $3 $pref
+$scriptfolder/getinfo.sh "$3" "$pref" "$api_url" "$pref_dl" "$page" "$bl_tags"
+echo 0 > "$3/$pref.lastpost.txt"
+$scriptfolder/lpgen.sh "$3" "$pref"
+$scriptfolder/dloader.sh "$3" "$pref"
 mv $3/new/*.* $3/
 echo -e ">>>\E[35mСкачивание тэга завершено\E[37m"
 if [ -e "$pref.NewPostsCount.txt" ]; then
@@ -96,15 +95,15 @@ fi
 fi
 ;;
 	-l)
-$scriptfolder/genlink.sh $post_url $3
+$scriptfolder/genlink.sh "$post_url" "$3"
 ;;
 	-gp)
 echo -e ">>>\E[35mСкачивание поста \E[37m'$3'"
-$scriptfolder/get.sh $pref $3 $api_url $pref_dl
+$scriptfolder/get.sh "$pref" "$3" "$api_url" "$pref_dl"
 echo -e ">>>\E[35mСкачивание завершено\E[37m"
 ;;
 	-sn)
-$scriptfolder/show_new.sh $pref
+$scriptfolder/show_new.sh "$pref"
 ;;
 	-mv)
 $scriptfolder/movenew.sh

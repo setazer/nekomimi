@@ -6,12 +6,6 @@ api_url=$3
 pref_dl=$4
 page=$5
 bl_tags=$6
-if [ "$pref_dl" == "-" ]; then
-pref_dl=""
-fi 
-if [ "$bl_tags" == "-" ]; then
-bl_tags=""
-fi 
 if [ ! -d $tag ]
 then
 mkdir "$tag"
