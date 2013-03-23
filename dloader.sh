@@ -1,5 +1,4 @@
 #! /bin/bash
-uag="Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.1.1) Gecko/20090715 Firefox/3.5.1 (.NET CLR 3.5.30729)"
 tag=$1
 pref=$2
 cd $tag
@@ -26,11 +25,9 @@ head -n $linen urlsids.txt |sed -e "s/ / $pref./g" > new/urlsids.txt
 cd new
 while read LINE ;do
 ext=`echo "$LINE" | grep -E -o -e "\.[^ ]{3,4} "|sed -e "s/ //g"`
-echo $LINE$ext >> dload.txt
+echo $LINE$ext | awk '{print "wget -nc -nv "$1" -O "$2}' | bash
 done < UrlsIds.txt
-cat dload.txt | awk '{print "wget -nc -nv "$1" -O "$2}' | bash
 rm -f urlsids.txt
-rm -f dload.txt
 cd ..
 echo -e ">>>\E[32mСкачивание завершено\E[37m"
 else
