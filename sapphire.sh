@@ -15,7 +15,7 @@ if [ -n "$serv_line" ]; then
 name=`echo $serv_line | grep -E -o -e "name=\"[^\"]+" | sed -e "s/name=\"//"`
 api_url=`echo $serv_line | grep -E -o -e "api_url=\"[^\"]+" | sed -e "s/api_url=\"//"`
 post_url=`echo $serv_line | grep -E -o -e "post_url=\"[^\"]+" | sed -e "s/post_url=\"//"`
-pref_dl=`echo $serv_line | grep -E -o -e "pref_dl=\"[^\"]*" | sed -e "s/pref_dl=\"//"`
+pref_dl=`echo $serv_line | grep -E -o -e "pref_dl=\"[^\"]+" | sed -e "s/pref_dl=\"//"`
 page=`echo $serv_line | grep -E -o -e "page=\"[^\"]+" | sed -e "s/page=\"//"`
 bl_tags=`echo $serv_line | grep -E -o -e "bl_tags=\"[^\"]+" | sed -r -e "s/bl_tags=\"//" -e "s/^/\+\-/" -e "s/ /\+\-/g"`
 else
@@ -31,7 +31,7 @@ cd $name
 case "$1" in
 	-ua)
 rm -f "$pref.NewPostsCount.txt"
-ls -d */ | grep -v -e '+' |sed -e 's/\///g' > tags.txt
+ls -d */ |sed -e 's/\///g' > tags.txt
 i=0
 total=`ls -d -1 */ | wc -l`
 while read LINE; do
