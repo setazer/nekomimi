@@ -32,26 +32,34 @@ case "$1" in
 	-ua)
 rm -f "$pref.NewPostsCount.txt"
 ls -d */ |sed -e 's/\///g' > tags.txt
-i=0
+actual_lastpost=`wget "$api_url&limit=1" -q -U "$uag" -O -|grep -E -o -e ' id=\"[^"]+'|sed -e "s/ id=\"//" -e "s/\"//"`
+echo -e ">>>\E[35mАктуальный ID: \E[37m$actual_lastpost"
+if [ -e "global_lastpost.txt" ]; then
+global_lastpost=$(cat global_lastpost.txt)
+echo -e ">>>\E[35mАктуальный ID в прошлый раз: \E[37m$global_lastpost"
+else
+echo 0 > global_lastpost.txt
+fi
 total=`ls -d -1 */ | wc -l`
+i=0
 while read LINE; do
 let i++
 echo -e ">>>\E[35mОбработка тэга ($i/$total): \E[37m$LINE"
 $scriptfolder/getinfo.sh "$LINE" "$pref" "$api_url" "$pref_dl" "$page" "$bl_tags"
-$scriptfolder/lpgen.sh "$LINE" "$pref"
-$scriptfolder/dloader.sh "$LINE" "$pref"
+$scriptfolder/dloader.sh "$LINE" "$pref" "$global_lastpost"
 echo ">>>"
 done < tags.txt
+echo $actual_lastpost > global_lastpost.txt
 rm -f tags.txt
 echo -e ">>>\E[35mОбновление тэгов завершено\E[37m"
 if [ -e "$pref.NewPostsCount.txt" ]; then
 echo ">>>"
 echo -e ">>>\E[35mНовые посты у тегов:\E[37m"
 cat "$pref.NewPostsCount.txt"
-echo -e ">>>\E[35mОткрыть папки с новыми тэгами?(y/n)\E[37m"
+echo -e ">>>\E[35mОткрыть папки с новыми тэгами?\E[37m(y/n)"
 read ans
 if [ "$ans" == "y" ]; then
-$scriptfolder/show_new.sh "$pref"
+$scriptfolder/show_new.sh
 fi
 fi
 ;;
@@ -61,12 +69,11 @@ then
 rm -f "$pref.NewPostsCount.txt"
 echo -e ">>>\E[35mОбработка тэга: \E[37m$3"
 $scriptfolder/getinfo.sh "$3" "$pref" "$api_url" "$pref_dl" "$page" "$bl_tags"
-$scriptfolder/lpgen.sh "$3" "$pref"
-$scriptfolder/dloader.sh "$3" "$pref"
+$scriptfolder/dloader.sh "$3" "$pref" "$global_lastpost"
 echo -e ">>>\E[35mОбновление тэга завершено\E[37m"
 if [ -e "$pref.NewPostsCount.txt" ]; then
 echo ">>>"
-echo -e ">>>\E[35mОткрыть папку с новыми постами?(y/n)\E[37m"
+echo -e ">>>\E[35mОткрыть папку с новыми постами?\E[37m(y/n)"
 read ans
 if [ "$ans" == "y" ]; then
 cd $3
@@ -82,14 +89,12 @@ fi
 rm -f "$pref.NewPostsCount.txt"
 echo -e ">>>\E[35mОбработка тэга: \E[37m$3"
 $scriptfolder/getinfo.sh "$3" "$pref" "$api_url" "$pref_dl" "$page" "$bl_tags"
-echo 0 > "$3/$pref.lastpost.txt"
-$scriptfolder/lpgen.sh "$3" "$pref"
-$scriptfolder/dloader.sh "$3" "$pref"
+$scriptfolder/dloader.sh "$3" "$pref" "0"
 mv $3/new/*.* $3/
 echo -e ">>>\E[35mСкачивание тэга завершено\E[37m"
 if [ -e "$pref.NewPostsCount.txt" ]; then
 echo ">>>"
-echo -e ">>>\E[35mОткрыть папку с новыми постами?(y/n)\E[37m"
+echo -e ">>>\E[35mОткрыть папку с новыми постами?\E[37m(y/n)"
 read ans
 if [ "$ans" == "y" ]; then
 start $3

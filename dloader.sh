@@ -1,13 +1,13 @@
 #! /bin/bash
 tag=$1
 pref=$2
+lastpost=$3
 cd $tag
 if [ -a skip.flag ] 
 then
 rm -f skip.flag
 exit
 fi
-lastpost=$(cat "$pref.lastpost.txt")
 linen=0;
 while read LINE; do
 if [ $LINE -le $lastpost ]
@@ -33,6 +33,5 @@ echo -e ">>>\E[32mСкачивание завершено\E[37m"
 else
 echo -e ">>>\E[31mНовые посты не найдены\E[37m"
 fi
-head -n 1 ids.txt > "$pref.lastpost.txt"
 rm -f UrlsIds.txt
 rm -f ids.txt
