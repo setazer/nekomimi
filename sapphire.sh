@@ -1,12 +1,14 @@
 #! /bin/bash
 cls
-while [ ! -d "$(cat pictures-folder.txt)" ]; do
+scriptfolder=`pwd`
+artfolder=`cat $scriptfolder/pictures-folder.txt`
+while [ ! -d "$artfolder" ]; do
 echo ">>>Основаная папка с пикчами не найдена"
 echo ">>>Введите путь до папки с пикчами:"
 read new_fold
 echo $new_fold > pictures-folder.txt
 done
-scriptfolder=`pwd`
+
 pref=$2
 serv_line=`grep "pref=\"$pref\"" servers.txt`
 if [ -n "$serv_line" ]; then
@@ -20,7 +22,7 @@ else
 echo -e ">>>\E[31mПрефикс сервера не опознан\E[37m"
 exit
 fi
-cd "$(cat pictures-folder.txt)"
+cd "$artfolder"
 if [ ! -d $name ]
 then
 mkdir "$name"
