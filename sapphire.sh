@@ -1,5 +1,6 @@
 #! /bin/bash
 cls
+uag="Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.1.1) Gecko/20090715 Firefox/3.5.1 (.NET CLR 3.5.30729)"
 scriptfolder=`pwd`
 artfolder=`cat $scriptfolder/pictures-folder.txt`
 while [ ! -d "$artfolder" ]; do
@@ -32,7 +33,7 @@ case "$1" in
 	-ua)
 rm -f "$pref.NewPostsCount.txt"
 ls -d */ |sed -e 's/\///g' > tags.txt
-actual_lastpost=`wget "$api_url&limit=1" -q -U "$uag" -O -|grep -E -o -e ' id=\"[^"]+'|sed -e "s/ id=\"//" -e "s/\"//"`
+actual_lastpost=`wget "$api_url&limit=1" --no-check-certificate -q -U "$uag" -O -|grep -E -o -e ' id=\"[^"]+'|sed -e "s/ id=\"//" -e "s/\"//"`
 echo -e ">>>\E[35mАктуальный ID: \E[37m$actual_lastpost"
 if [ -e "global_lastpost.txt" ]; then
 global_lastpost=$(cat global_lastpost.txt)
@@ -90,14 +91,14 @@ rm -f "$pref.NewPostsCount.txt"
 echo -e ">>>\E[35mОбработка тэга: \E[37m$3"
 $scriptfolder/getinfo.sh "$3" "$pref" "$api_url" "$pref_dl" "$page" "$bl_tags"
 $scriptfolder/dloader.sh "$3" "$pref" "0"
-mv $3/new/*.* $3/
 echo -e ">>>\E[35mСкачивание тэга завершено\E[37m"
 if [ -e "$pref.NewPostsCount.txt" ]; then
 echo ">>>"
 echo -e ">>>\E[35mОткрыть папку с новыми постами?\E[37m(y/n)"
 read ans
 if [ "$ans" == "y" ]; then
-start $3
+cd $3
+start new
 fi
 fi
 ;;
@@ -115,6 +116,9 @@ $scriptfolder/show_new.sh "$pref"
 	-mv)
 $scriptfolder/movenew.sh
 echo -e ">>>\E[32mПеремещение завершено\E[37m"
+;;
+	-vk)
+	$scriptfolder/vk.sh "$3" "$post_url" "$api_url" "$pref_dl" 
 ;;
 	--help)
 cat $scriptfolder/README.txt

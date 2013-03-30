@@ -23,9 +23,12 @@ echo -e ">>>\E[36mВсего: \E[37m$linen"
 echo "$tag: $linen" >> "../$pref.NewPostsCount.txt"
 head -n $linen urlsids.txt |sed -e "s/ / $pref./g" > new/urlsids.txt
 cd new
+i=1
 while read LINE ;do
 ext=`echo "$LINE" | grep -E -o -e "\.[^ ]{3,4} "|sed -e "s/ //g"`
-echo $LINE$ext | awk '{print "wget -nc -nv "$1" -O "$2}' | bash
+echo -e ">>>\E[36mСкачивание поста $i/$linen\E[37m"
+echo $LINE$ext | awk '{print "wget --no-check-certificate -c -nv "$1" -O "$2}' | bash
+let "i++"
 done < UrlsIds.txt
 rm -f urlsids.txt
 cd ..
