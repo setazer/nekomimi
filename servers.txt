@@ -11,3 +11,4 @@ pref="gel" name="Gelbooru" api_url="http://youhate.us/index.php?page=dapi&s=post
 pref="kona" name="Konachan" api_url="http://konachan.com/post.xml?" page="page" post_url="http://konachan.com/post/show/" bl_tags="mahou_shoujo_madoka_magica"
 pref="yan" name="Yandere" api_url="https://yande.re/post/index.xml?" page="page" post_url="https://yande.re/post/show/"
 pref="dan" name="Danbooru" api_url="http://danbooru.donmai.us/post/index.xml?" pref_dl="http://danbooru.donmai.us" page="page" post_url="http://danbooru.donmai.us/posts/"
+pref="ap" name="Anime-Pictures" api_url="http://anime-pictures.net/pictures/view_posts/0?lang=ru&type=xml" page="" bl_tags="" post_url=""

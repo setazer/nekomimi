@@ -35,7 +35,6 @@ tag_id="$3"
 serv_line=`grep "pref=\"$pref\"" servers.txt`
 fi
 if [ -n "$serv_line" ]; then
-
 name=`echo $serv_line | grep -E -o -e "name=\"[^\"]+" | sed -e "s/name=\"//"`
 api_url=`echo $serv_line | grep -E -o -e "api_url=\"[^\"]+" | sed -e "s/api_url=\"//"`
 post_url=`echo $serv_line | grep -E -o -e "post_url=\"[^\"]+" | sed -e "s/post_url=\"//"`
