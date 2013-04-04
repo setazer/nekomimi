@@ -9,10 +9,33 @@ echo ">>>Введите путь до папки с пикчами:"
 read new_fold
 echo $new_fold > pictures-folder.txt
 done
-
-pref=$2
+if [ -z "$2" ]; then
+if [ "${1:0:1}" == "-" ];then
+command="$1"
+else
+command="-n"
+tag_id="$1"
+fi
+serv_line=`grep "default_prefix" servers.txt`
+pref=`echo $serv_line | grep -E -o -e "pref=\"[^\"]+" | sed -e "s/pref=\"//"`
+elif [ -z "$3" ]; then
+command="$1"
+if [ ! "$command" == "-mv" -a ! "$command" == "-sn" -a ! "$command" == "--help" ]; then
+tag_id="$2"
+serv_line=`grep "default_prefix" servers.txt`
+pref=`echo $serv_line | grep -E -o -e "pref=\"[^\"]+" | sed -e "s/pref=\"//"`
+else
+pref="$2"
 serv_line=`grep "pref=\"$pref\"" servers.txt`
+fi
+else
+command="$1"
+pref="$2"
+tag_id="$3"
+serv_line=`grep "pref=\"$pref\"" servers.txt`
+fi
 if [ -n "$serv_line" ]; then
+
 name=`echo $serv_line | grep -E -o -e "name=\"[^\"]+" | sed -e "s/name=\"//"`
 api_url=`echo $serv_line | grep -E -o -e "api_url=\"[^\"]+" | sed -e "s/api_url=\"//"`
 post_url=`echo $serv_line | grep -E -o -e "post_url=\"[^\"]+" | sed -e "s/post_url=\"//"`
@@ -29,7 +52,7 @@ then
 mkdir "$name"
 fi
 cd $name
-case "$1" in
+case "$command" in
 	-ua)
 rm -f "$pref.NewPostsCount.txt"
 ls -d */ |sed -e 's/\///g' > tags.txt
@@ -65,49 +88,57 @@ fi
 fi
 ;;
 	-u)
-if [ -d "$3" ]
+if [ -d "$tag_id" ]
 then
 rm -f "$pref.NewPostsCount.txt"
-echo -e ">>>\E[35mОбработка тэга: \E[37m$3"
-$scriptfolder/getinfo.sh "$3" "$pref" "$api_url" "$pref_dl" "$page" "$bl_tags"
-$scriptfolder/dloader.sh "$3" "$pref" "$global_lastpost"
+actual_lastpost=`wget "$api_url&limit=1" --no-check-certificate -q -U "$uag" -O -|grep -E -o -e ' id=\"[^"]+'|sed -e "s/ id=\"//" -e "s/\"//"`
+echo -e ">>>\E[35mАктуальный ID: \E[37m$actual_lastpost"
+if [ -e "global_lastpost.txt" ]; then
+global_lastpost=$(cat global_lastpost.txt)
+echo -e ">>>\E[35mАктуальный ID в прошлый раз: \E[37m$global_lastpost"
+else
+echo 0 > global_lastpost.txt
+fi
+echo -e ">>>\E[35mОбработка тэга: \E[37m$tag_id"
+$scriptfolder/getinfo.sh "$tag_id" "$pref" "$api_url" "$pref_dl" "$page" "$bl_tags"
+$scriptfolder/dloader.sh "$tag_id" "$pref" "$global_lastpost"
 echo -e ">>>\E[35mОбновление тэга завершено\E[37m"
 if [ -e "$pref.NewPostsCount.txt" ]; then
 echo ">>>"
 echo -e ">>>\E[35mОткрыть папку с новыми постами?\E[37m(y/n)"
 read ans
 if [ "$ans" == "y" ]; then
-cd $3
+cd "$tag_id"
 start new
 cd ..
 fi
 fi
 else
-echo -e ">>>\E[31mТэг \E[37m'$3' \E[31mне найден!\E[37m"
+echo -e ">>>\E[31mТэг \E[37m'$tag_id' \E[31mне найден!\E[37m"
 fi
 ;;
 	-n)
 rm -f "$pref.NewPostsCount.txt"
-echo -e ">>>\E[35mОбработка тэга: \E[37m$3"
-$scriptfolder/getinfo.sh "$3" "$pref" "$api_url" "$pref_dl" "$page" "$bl_tags"
-$scriptfolder/dloader.sh "$3" "$pref" "0"
+echo -e ">>>\E[35mОбработка тэга: \E[37m$tag_id"
+$scriptfolder/getinfo.sh "$tag_id" "$pref" "$api_url" "$pref_dl" "$page" "$bl_tags"
+$scriptfolder/dloader.sh "$tag_id" "$pref" "0"
 echo -e ">>>\E[35mСкачивание тэга завершено\E[37m"
 if [ -e "$pref.NewPostsCount.txt" ]; then
 echo ">>>"
 echo -e ">>>\E[35mОткрыть папку с новыми постами?\E[37m(y/n)"
 read ans
 if [ "$ans" == "y" ]; then
-cd $3
+cd "$tag_id"
 start new
 fi
 fi
 ;;
 	-l)
-$scriptfolder/genlink.sh "$post_url" "$3"
+$scriptfolder/genlink.sh "$post_url" "$tag_id"
 ;;
 	-gp)
-echo -e ">>>\E[35mСкачивание поста \E[37m'$3'"
-$scriptfolder/get.sh "$pref" "$3" "$api_url" "$pref_dl"
+echo -e ">>>\E[35mСкачивание поста \E[37m'$tag_id'"
+$scriptfolder/get.sh "$pref" "$tag_id" "$api_url" "$pref_dl"
 echo -e ">>>\E[35mСкачивание завершено\E[37m"
 ;;
 	-sn)
@@ -118,7 +149,7 @@ $scriptfolder/movenew.sh
 echo -e ">>>\E[32mПеремещение завершено\E[37m"
 ;;
 	-vk)
-	$scriptfolder/vk.sh "$3" "$post_url" "$api_url" "$pref_dl" 
+	$scriptfolder/vk.sh "$tag_id" "$post_url" "$api_url" "$pref_dl" 
 ;;
 	--help)
 cat $scriptfolder/README.txt

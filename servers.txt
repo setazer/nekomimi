@@ -7,7 +7,7 @@
 #post_url - URL для генерации ссылки для браузера
 pref="rule34" name="Rule34" api_url="http://rule34.xxx/index.php?page=dapi&s=post&q=index" page="pid" post_url="http://rule34.paheal.net/post/view/"
 pref="safe" name="Safebooru" api_url="http://safebooru.org/index.php?page=dapi&s=post&q=index" page="pid" post_url="safebooru.org/index.php?page=forum&s=view&id="
-pref="gel" name="Gelbooru" api_url="http://youhate.us/index.php?page=dapi&s=post&q=index" page="pid" bl_tags="penis cum huge_breasts huge_penis pussy sex" post_url="http://gelbooru.com/index.php?page=post&s=view&id="
-pref="kona" name="Konachan" api_url="http://konachan.com/post.xml?" page="page" post_url="http://konachan.com/post/show/"
+pref="gel" name="Gelbooru" api_url="http://youhate.us/index.php?page=dapi&s=post&q=index" page="pid" bl_tags="penis cum huge_breasts huge_penis pussy sex mahou_shoujo_madoka_magica" post_url="http://gelbooru.com/index.php?page=post&s=view&id=" default_prefix
+pref="kona" name="Konachan" api_url="http://konachan.com/post.xml?" page="page" post_url="http://konachan.com/post/show/" bl_tags="mahou_shoujo_madoka_magica"
 pref="yan" name="Yandere" api_url="https://yande.re/post/index.xml?" page="page" post_url="https://yande.re/post/show/"
 pref="dan" name="Danbooru" api_url="http://danbooru.donmai.us/post/index.xml?" pref_dl="http://danbooru.donmai.us" page="page" post_url="http://danbooru.donmai.us/posts/"
