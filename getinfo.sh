@@ -21,6 +21,7 @@ postcount=`echo $res|grep -E -o -e 'posts\ count=\"[^"]+'|sed -e 's/posts\ count
 posts_on_page=`echo $res |grep -c -e "<post "`
 if [ ! -z $postcount ]
 then
+if [ $postcount -ne 0 ];then
 echo -e ">>>\E[36mВсего постов: \E[37m$postcount"
 rm -f UrlsIds.txt
 let "pcount=postcount/1000"
@@ -29,6 +30,10 @@ sed -i ':a;N;$!ba;s/\n / /g' UrlsIds.txt
 done;
 grep -E -o -e ' [^\n]+' UrlsIds.txt |sed -e 's/ //g' > Ids.txt
 echo -e ">>>\E[32mДанные сохранены\E[37m"
+else
+echo -e ">>>\E[31mПостов почему-то нет. Изменили тег?\E[37m"
+echo "$tag" >> ../lost_tags.txt
+fi
 elif [ $posts_on_page -gt 0 ]; then
 echo -e ">>>\E[36mОбщее количество постов неизвестно. Скачиваем постранично\E[37m"
 rm -f UrlsIds.txt

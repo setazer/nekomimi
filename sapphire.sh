@@ -38,6 +38,7 @@ if [ -n "$serv_line" ]; then
 name=`echo $serv_line | grep -E -o -e "name=\"[^\"]+" | sed -e "s/name=\"//"`
 api_url=`echo $serv_line | grep -E -o -e "api_url=\"[^\"]+" | sed -e "s/api_url=\"//"`
 post_url=`echo $serv_line | grep -E -o -e "post_url=\"[^\"]+" | sed -e "s/post_url=\"//"`
+pool_url=`echo $serv_line | grep -E -o -e "pool_url=\"[^\"]+" | sed -e "s/pool_url=\"//"`
 pref_dl=`echo $serv_line | grep -E -o -e "pref_dl=\"[^\"]+" | sed -e "s/pref_dl=\"//"`
 page=`echo $serv_line | grep -E -o -e "page=\"[^\"]+" | sed -e "s/page=\"//"`
 bl_tags=`echo $serv_line | grep -E -o -e "bl_tags=\"[^\"]+" | sed -r -e "s/bl_tags=\"//" -e "s/^/\+\-/" -e "s/ /\+\-/g"`
@@ -57,22 +58,17 @@ rm -f "$pref.NewPostsCount.txt"
 ls -d */ |sed -e 's/\///g' > tags.txt
 actual_lastpost=`wget "$api_url&limit=1" --no-check-certificate -q -U "$uag" -O -|grep -E -o -e ' id=\"[^"]+'|sed -e "s/ id=\"//" -e "s/\"//"`
 echo -e ">>>\E[35mАктуальный ID: \E[37m$actual_lastpost"
-if [ -e "global_lastpost.txt" ]; then
-global_lastpost=$(cat global_lastpost.txt)
-echo -e ">>>\E[35mАктуальный ID в прошлый раз: \E[37m$global_lastpost"
-else
-echo 0 > global_lastpost.txt
-fi
 total=`ls -d -1 */ | wc -l`
 i=0
 while read LINE; do
 let i++
 echo -e ">>>\E[35mОбработка тэга ($i/$total): \E[37m$LINE"
+$scriptfolder/lpgen.sh "$LINE" "$pref"
 $scriptfolder/getinfo.sh "$LINE" "$pref" "$api_url" "$pref_dl" "$page" "$bl_tags"
-$scriptfolder/dloader.sh "$LINE" "$pref" "$global_lastpost"
+$scriptfolder/dloader.sh "$LINE" "$pref" "false"
 echo ">>>"
 done < tags.txt
-echo $actual_lastpost > global_lastpost.txt
+echo $actual_lastpost >> lastpost_history.txt
 rm -f tags.txt
 echo -e ">>>\E[35mОбновление тэгов завершено\E[37m"
 if [ -e "$pref.NewPostsCount.txt" ]; then
@@ -99,8 +95,9 @@ else
 echo 0 > global_lastpost.txt
 fi
 echo -e ">>>\E[35mОбработка тэга: \E[37m$tag_id"
+$scriptfolder/lpgen.sh "$tag_id" "$pref"
 $scriptfolder/getinfo.sh "$tag_id" "$pref" "$api_url" "$pref_dl" "$page" "$bl_tags"
-$scriptfolder/dloader.sh "$tag_id" "$pref" "$global_lastpost"
+$scriptfolder/dloader.sh "$tag_id" "$pref" "false"
 echo -e ">>>\E[35mОбновление тэга завершено\E[37m"
 if [ -e "$pref.NewPostsCount.txt" ]; then
 echo ">>>"
@@ -120,7 +117,7 @@ fi
 rm -f "$pref.NewPostsCount.txt"
 echo -e ">>>\E[35mОбработка тэга: \E[37m$tag_id"
 $scriptfolder/getinfo.sh "$tag_id" "$pref" "$api_url" "$pref_dl" "$page" "$bl_tags"
-$scriptfolder/dloader.sh "$tag_id" "$pref" "0"
+$scriptfolder/dloader.sh "$tag_id" "$pref" "true"
 echo -e ">>>\E[35mСкачивание тэга завершено\E[37m"
 if [ -e "$pref.NewPostsCount.txt" ]; then
 echo ">>>"
@@ -137,8 +134,24 @@ $scriptfolder/genlink.sh "$post_url" "$tag_id"
 ;;
 	-gp)
 echo -e ">>>\E[35mСкачивание поста \E[37m'$tag_id'"
-$scriptfolder/get.sh "$pref" "$tag_id" "$api_url" "$pref_dl"
+$scriptfolder/getpost.sh "$pref" "$tag_id" "$api_url" "$pref_dl"
 echo -e ">>>\E[35mСкачивание завершено\E[37m"
+;;
+    -gpl)
+if [ ! -d "Pools" ]
+then
+mkdir "Pools"
+fi
+cd Pools
+echo -e ">>>\E[35mОбработка тэга: \E[37m$tag_id"
+$scriptfolder/getpoolinfo.sh "$tag_id" "$pref" "$pool_url"
+$scriptfolder/dloader.sh "$tag_id" "$pref" "true"
+echo -e ">>>\E[35mСкачивание тэга завершено\E[37m"
+echo -e ">>>\E[35mОткрыть папку с новыми постами?\E[37m(y/n)"
+read ans
+if [ "$ans" == "y" ]; then
+start "$tag_id"
+fi
 ;;
 	-sn)
 $scriptfolder/show_new.sh "$pref"
