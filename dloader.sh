@@ -34,7 +34,6 @@ cd new
 else
 head -n $linen urlsids.txt |sed -e "s/ / $pref./g" > urlsids.txt
 fi
-
 i=1
 while read LINE; do
 ext=`echo "$LINE" | grep -E -o -e "\.[^ ]{3,4} "|sed -e "s/ //g"`

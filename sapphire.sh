@@ -56,7 +56,7 @@ case "$command" in
 	-ua)
 rm -f "$pref.NewPostsCount.txt"
 ls -d */ |sed -e 's/\///g' > tags.txt
-actual_lastpost=`wget "$api_url&limit=1" --no-check-certificate -q -U "$uag" -O -|grep -E -o -e ' id=\"[^"]+'|sed -e "s/ id=\"//" -e "s/\"//"`
+actual_lastpost=`curl -# "$api_url&limit=1" |grep -E -o -e ' id=\"[^"]+'|sed -e "s/ id=\"//" -e "s/\"//"`
 echo -e ">>>\E[35mАктуальный ID: \E[37m$actual_lastpost"
 total=`ls -d -1 */ | wc -l`
 i=0
@@ -86,7 +86,7 @@ fi
 if [ -d "$tag_id" ]
 then
 rm -f "$pref.NewPostsCount.txt"
-actual_lastpost=`wget "$api_url&limit=1" --no-check-certificate -q -U "$uag" -O -|grep -E -o -e ' id=\"[^"]+'|sed -e "s/ id=\"//" -e "s/\"//"`
+actual_lastpost=`curl -# "$api_url&limit=1"|grep -E -o -e ' id=\"[^"]+'|sed -e "s/ id=\"//" -e "s/\"//"`
 echo -e ">>>\E[35mАктуальный ID: \E[37m$actual_lastpost"
 if [ -e "global_lastpost.txt" ]; then
 global_lastpost=$(cat global_lastpost.txt)
