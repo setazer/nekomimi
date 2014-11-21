@@ -1,4 +1,4 @@
-#! /bin/bash
+Ôªø#! /bin/bash
 uag="Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.1.1) Gecko/20090715 Firefox/3.5.1 (.NET CLR 3.5.30729)"
 tag=$1
 pref=$2
@@ -13,14 +13,14 @@ if [ ! -d $tag/new ];then
 	mkdir "$tag/new"
 fi
 cd $tag
-echo -e ">>>\E[36m—Í‡˜Ë‚‡ÌËÂ ‰‡ÌÌ˚ı Ú˝„‡\E[37m"
+echo -e ">>>\E[36m–°–∫–∞—á–∏–≤–∞–Ω–∏–µ –¥–∞–Ω–Ω—ã—Ö —Ç—ç–≥–∞\E[37m"
 res=`curl -# "$api_url&tags=$tag$bl_tags&limit=1"`
 postcount=`echo $res|grep -E -o -e 'posts\ count=\"[^"]+'|sed -e 's/posts\ count=//' -e 's/\"//'`
 posts_on_page=`echo $res |grep -c -e "<post "`
 if [ ! -z $postcount ]
 	then
 	if [ $postcount -ne 0 ];then
-		echo -e ">>>\E[36m¬ÒÂ„Ó ÔÓÒÚÓ‚: \E[37m$postcount"
+		echo -e ">>>\E[36m–í—Å–µ–≥–æ –ø–æ—Å—Ç–æ–≤: \E[37m$postcount"
 		rm -f UrlsIds.txt
 		let "pcount=postcount/1000"
 		for ((i=0; i<=$pcount; i++));do
@@ -28,19 +28,19 @@ if [ ! -z $postcount ]
 			sed -i ':a;N;$!ba;s/\n / /g' UrlsIds.txt 
 		done;
 		grep -E -o -e ' [^\n]+' UrlsIds.txt |sed -e 's/ //g' > Ids.txt
-		echo -e ">>>\E[32mƒ‡ÌÌ˚Â ÒÓı‡ÌÂÌ˚\E[37m"
+		echo -e ">>>\E[32m–î–∞–Ω–Ω—ã–µ —Å–æ—Ö—Ä–∞–Ω–µ–Ω—ã\E[37m"
 	else
-		echo -e ">>>\E[31mœÓÒÚÓ‚ ÔÓ˜ÂÏÛ-ÚÓ ÌÂÚ. »ÁÏÂÌËÎË ÚÂ„?\E[37m"
+		echo -e ">>>\E[31m–ü–æ—Å—Ç–æ–≤ –ø–æ—á–µ–º—É-—Ç–æ –Ω–µ—Ç. –ò–∑–º–µ–Ω–∏–ª–∏ —Ç–µ–≥?\E[37m"
 		echo "$tag" >> ../lost_tags.txt
 	fi
 elif [ $posts_on_page -gt 0 ]; then
-	echo -e ">>>\E[36mŒ·˘ÂÂ ÍÓÎË˜ÂÒÚ‚Ó ÔÓÒÚÓ‚ ÌÂËÁ‚ÂÒÚÌÓ. —Í‡˜Ë‚‡ÂÏ ÔÓÒÚ‡ÌË˜ÌÓ\E[37m"
+	echo -e ">>>\E[36m–û–±—â–µ–µ –∫–æ–ª–∏—á–µ—Å—Ç–≤–æ –ø–æ—Å—Ç–æ–≤ –Ω–µ–∏–∑–≤–µ—Å—Ç–Ω–æ. –°–∫–∞—á–∏–≤–∞–µ–º –ø–æ—Å—Ç—Ä–∞–Ω–∏—á–Ω–æ\E[37m"
 	rm -f UrlsIds.txt
 	i=1
 	curl -# "$api_url&tags=$tag$bl_tags&limit=200&$page=$i" >> links.txt
 	posts_on_page=`grep -c -e "post " links.txt`
 	while [ $posts_on_page -gt 0 ]; do
-		echo -e ">>>\E[36mœ‡ÒËÏ (Â˘Â) \E[37m$posts_on_page \E[36mÔÓÒÚÓ‚\E[37m"
+		echo -e ">>>\E[36m–ü–∞—Ä—Å–∏–º (–µ—â–µ) \E[37m$posts_on_page \E[36m–ø–æ—Å—Ç–æ–≤\E[37m"
 		grep -E -o -e 'file_url=[^ ]+' -e ' id=[^ ]+' links.txt|sed -e "s,file_url=,$pref_dl,g" -e 's/id=//g' -e 's/\"//g' >>UrlsIds.txt
 		let "i++"
 		sed -i ':a;N;$!ba;s/\n / /g' UrlsIds.txt 
@@ -49,8 +49,8 @@ elif [ $posts_on_page -gt 0 ]; then
 	done
 	rm -f links.txt
 	grep -E -o -e ' [^\n]+' UrlsIds.txt |sed -e 's/ //g' > Ids.txt
-	echo -e ">>>\E[32mƒ‡ÌÌ˚Â ÒÓı‡ÌÂÌ˚\E[37m"
+	echo -e ">>>\E[32m–î–∞–Ω–Ω—ã–µ —Å–æ—Ö—Ä–∞–Ω–µ–Ω—ã\E[37m"
 else
-	echo -e ">>>\E[31mŒ¯Ë·Í‡ ÔË ÔÓÎÛ˜ÂÌËË ÍÓÎË˜ÂÒÚ‚‡ ÔÓÒÚÓ‚. œÓÔÛÒÍ ÓÒÚ‡‚¯ËıÒˇ ÓÔÂ‡ˆËÈ\E[37m"
+	echo -e ">>>\E[31m–û—à–∏–±–∫–∞ –ø—Ä–∏ –ø–æ–ª—É—á–µ–Ω–∏–∏ –∫–æ–ª–∏—á–µ—Å—Ç–≤–∞ –ø–æ—Å—Ç–æ–≤. –ü—Ä–æ–ø—É—Å–∫ –æ—Å—Ç–∞–≤—à–∏—Ö—Å—è –æ–ø–µ—Ä–∞—Ü–∏–π\E[37m"
 	echo "" > skip.flag
 fi
