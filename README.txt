@@ -16,8 +16,8 @@
  Во всех тегах префикс сервера указывать не обязательно - в случае его отсутствия, из servers.txt берётся сервер с ключом default_prefix.
  Так же необязательно указывать ключ командной строки - в таком случае по-умолчанию подразумевается ключ -n.
  Примеры:
- sapphire.sh -ua gel - Обновляет все теги с сервера гельбур
- sapphire.sh -ua - Делает тоже самое, если в servers.txt строчка с сервером Gelbooru имеет ключ default_prefix.
- sapphire.sh -n gel tag_name - Скачивает тег tag_name с сервера gelbooru.
- sapphire.sh tag_name - делает тоже самое, при указанном выше условии.
+ nekomimi.sh -ua gel - Обновляет все теги с сервера гельбур
+ nekomimi.sh -ua - Делает тоже самое, если в servers.txt строчка с сервером Gelbooru имеет ключ default_prefix.
+ nekomimi.sh -n gel tag_name - Скачивает тег tag_name с сервера gelbooru.
+ nekomimi.sh tag_name - делает тоже самое, при указанном выше условии.
  *Тэго-папка - Папка с названием скаченного тэга.

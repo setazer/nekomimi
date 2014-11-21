@@ -1,26 +1,25 @@
-#! /bin/bash
+п»ї#! /bin/bash
 echo "#! /bin/bash" >starter.sh
 ls -d */ | sed -e 's/\///g' > tags.txt
 i=0
 j=0
 while read LINE; do
-cd "$LINE/new"
-if [ `ls -1 | wc -l` -gt 0 ]
-then
-let "i++"
-let "j++"
-echo ">>>Будет открыта папка: $LINE"
-echo "cd \"$LINE\"" >> ../../starter.sh
-echo "start new" >> ../../starter.sh
-echo "cd .." >> ../../starter.sh
-if [ $i -eq 10 ]; then
-echo "read -p '10 папок открыто. Нажмите Enter чтобы продолжить.'" >> ../../starter.sh
-let "i=0"
-fi
-fi
-cd ../..
+	cd "$LINE/new"
+	if [ `ls -1 | wc -l` -gt 0 ];then
+		let "i++"
+		let "j++"
+		echo ">>>Р‘СѓРґРµС‚ РѕС‚РєСЂС‹С‚Р° РїР°РїРєР°: $LINE"
+		echo "cd \"$LINE\"" >> ../../starter.sh
+		echo "start new" >> ../../starter.sh
+		echo "cd .." >> ../../starter.sh
+		if [ $i -eq 10 ]; then
+			echo "read -p '10 РїР°РїРѕРє РѕС‚РєСЂС‹С‚Рѕ. РќР°Р¶РјРёС‚Рµ Enter С‡С‚РѕР±С‹ РїСЂРѕРґРѕР»Р¶РёС‚СЊ.'" >> ../../starter.sh
+			let "i=0"
+		fi
+	fi
+	cd ../..
 done < tags.txt
-echo ">>>Всего будет открыто папок: $j"
+echo ">>>Р’СЃРµРіРѕ Р±СѓРґРµС‚ РѕС‚РєСЂС‹С‚Рѕ РїР°РїРѕРє: $j"
 rm -f tags.txt
 starter.sh
 rm -f starter.sh
