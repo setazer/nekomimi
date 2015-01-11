@@ -1,4 +1,4 @@
-﻿#! /bin/bash
+#! /bin/bash
 pref=$1
 id=$2
 api_url=$3

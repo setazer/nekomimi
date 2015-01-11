@@ -1,4 +1,4 @@
-﻿#! /bin/bash
+#! /bin/bash
 id=$1
 post_url=$2
 api_url=$3

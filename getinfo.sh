@@ -1,4 +1,4 @@
-﻿#! /bin/bash
+#! /bin/bash
 uag="Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.1.1) Gecko/20090715 Firefox/3.5.1 (.NET CLR 3.5.30729)"
 tag=$1
 pref=$2
@@ -25,6 +25,7 @@ if [ ! -z $postcount ]
 		let "pcount=postcount/1000"
 		for ((i=0; i<=$pcount; i++));do
 			`curl -# "$api_url&tags=$tag$bl_tags&limit=1000&$page=$i" |grep -E -o -e 'file_url=[^ ]+' -e ' id=[^ ]+'|sed -e 's/file_url=//g' -e 's/id=//g' -e 's/\"//g' >>UrlsIds.txt`
+			echo -e "\n" >> UrlsIds.txt
 			sed -i ':a;N;$!ba;s/\n / /g' UrlsIds.txt 
 		done;
 		grep -E -o -e ' [^\n]+' UrlsIds.txt |sed -e 's/ //g' > Ids.txt
